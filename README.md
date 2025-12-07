@@ -1,201 +1,200 @@
-# Book Discount Price – TDD Kata (Spring Boot 4, Java 25)
-A fully test-driven implementation of the Development Books Discount Kata, built using Spring Boot 4, Java 25, Mockito, WebMvcTest, and modern records, Lombok, and clean architecture principles.
+# 📘 **Book Price UI — ReactJS Frontend**
 
-The project follows professional standards including:
+A lightweight React + Vite frontend for the **Book Discount Price Kata**.
+This UI allows users to:
 
-✔ TDD workflow
+* View all available books
+* Increase/decrease quantities
+* Build a shopping basket
+* Calculate total price including discounts
+* Display final pricing summary
 
-✔ Clean separation of layers
+This frontend communicates with the backend:
 
-✔ Enum-driven domain model
+| API                          | Method | Description                                |
+| ---------------------------- | ------ | ------------------------------------------ |
+| `/api/books/getbooks`        | GET    | Fetch all available development books      |
+| `/api/books/price/calculate` | POST   | Compute price, discount, and merged basket |
 
-✔ DTO responses
+---
 
-✔ Mapping layer
+# 🚀 **Tech Stack**
 
-✔ Global exception handling
+* **React 18**
+* **Vite** (super-fast frontend build tool)
+* **React Router DOM v6**
+* **Fetch API** for backend calls
+* **CSS Modules or Plain CSS**
+* **Node.js 18+**
 
-✔ REST API with OpenAPI/Swagger
+---
 
-✔ 100% controller + service test coverage
+# 📁 **Project Structure**
 
-# Project Overview
-This kata calculates the total price of books bought from a predefined list (Development Books collection). Discounts apply depending on the number of distinct books purchased.
+```
+book-price-ui/
+│
+├── src/
+│   ├── api/
+│   │   └── bookApi.js
+│   ├── components/
+│   │   ├── BookCard.jsx
+│   │   └── BasketSummary.jsx
+│   ├── pages/
+│   │   ├── BookListPage.jsx
+│   │   └── PriceSummaryPage.jsx
+│   ├── App.jsx
+│   ├── main.jsx
+│   ├── index.css
+│   └── styles/
+│
+├── public/
+├── package.json
+├── vite.config.js
+└── README.md  ← (this file)
+```
 
-✔ Core Features
+---
 
-Fetch the list of available books (GET /api/books/getbooks)
+# 🧩 **UI Flow**
 
-Calculate price with discount (POST /api/books/price/calculate)
+### **1️⃣ Home Page — BookListPage**
 
-Use Java 25 records for immutable DTOs
+* Fetches all books (`GET /api/books/getbooks`)
+* Displays books using `<BookCard />`
+* User can adjust quantity ( + / – buttons )
+* Basket summary updates dynamically
+* Click **"Proceed to Checkout"** → navigates to final summary page
 
-Enum-based fixed book catalog
+### **2️⃣ Price Summary Page — PriceSummaryPage**
 
-Input validation
+* Sends the basket to backend:
 
-Global exception handling (@RestControllerAdvice)
+  ```
+  POST /api/books/price/calculate
+  ```
+* Displays:
 
-Extensive unit + controller tests
+    * Final merged basket
+    * Total Original Price
+    * Discounted Price
 
-Follows Test-Driven Development principles
+---
 
--------------------------------
-# Requirement
-There is a series of books about software development that have been read by a lot of developers who want to improve their development skills. Let’s say an editor, in a gesture of immense generosity to mankind (and to increase sales as well), is willing to set up a pricing model where you can get discounts when you buy these books. The available books are :
+# ⚙️ **Installation & Setup**
 
-1. Clean Code (Robert Martin, 2008)
-2. The Clean Coder (Robert Martin, 2011)
-3. Clean Architecture (Robert Martin, 2017)
-4. Test Driven Development by Example (Kent Beck, 2003)
-5. Working Effectively With Legacy Code (Michael C. Feathers, 2004)
+### **1. Clone Repository**
 
-## Rules
-One copy of the five books costs 50 EUR.
+```bash
+git clone https://github.com/tamalyaahoo/book-price-ui.git
+cd book-price-ui
+```
 
-- If, however, you buy two different books from the series, you get a 5% discount on those two books.
-- If you buy 3 different books, you get a 10% discount.
-- If you buy 4 different books, you get a 20% discount.
-- If you go for the whole hog, and buy all 5, you get a huge 25% discount.
-- Note that if you buy, say, 4 books, of which 3 are different titles, you get a 10% discount on the 3 that form part of a set, but the 4th book still costs 50 EUR.
+### **2. Install Dependencies**
 
-## Functional case
-If the shopping basket contains the below books.
+```bash
+npm install
+```
 
-- 2 copies of the “Clean Code” book
-- 2 copies of the “Clean Coder” book
-- 2 copies of the “Clean Architecture” book
-- 1 copy of the “Test Driven Development by Example” book
-- 1 copy of the “Working effectively with Legacy Code” book
+### **3. Start the UI**
 
-We can avail the discounts for above shopping basket containing 8 books by grouping [5,3] or [4,4] or [3,3,2], etc. Output should be 320 EUR as the best price by applying [4,4] as below.
+```bash
+npm run dev
+```
 
-- (4 * 50 EUR) - 20% [first book, second book, third book, fourth book]
-- (4 * 50 EUR) - 20% [first book, second book, third book, fifth book]
+### **4. Open in Browser**
 
-= (160 EUR + 160 EUR) => 320 EUR
+```
+http://localhost:5173/
+```
 
-# Discount Rules
-Distinct-Books	 ------------    Discount
+---
 
-1 book -----------------------	0%
+# 🔌 **API Configuration**
 
-2 books -----------------------	5%
+The UI expects backend running at **[http://localhost:8081](http://localhost:8081)**.
 
-3 books -----------------------	10%
+Update `/src/api/bookApi.js` if needed:
 
-4 books -----------------------	20%
+```js
+export const BASE_URL = "http://localhost:8081/api/books";
+```
 
-5 books -----------------------	25%
+---
 
-Each book has a fixed price of EUR 50.
+# 🧪 **Test API Endpoints**
 
-# API Endpoints
-## 1. Get All Books
+### ✔ Fetch books
 
-- GET /api/books/getbooks
+```bash
+curl http://localhost:8081/api/books/getbooks
+```
 
-Response :
-`[
-  {
-  "id": 1,
-  "title": "Clean Code",
-  "author": "Robert Martin",
-  "year": 2008,
-  "price": 50.0
-  },
-  ...
-  ]`
+### ✔ Calculate price
 
-## 2. Calculate Price
+```bash
+curl -X POST http://localhost:8081/api/books/price/calculate \
+-H "Content-Type: application/json" \
+-d '{
+  "bookList": [
+    {"title": "Clean Code", "quantity": 1},
+    {"title": "The Clean Coder", "quantity": 1}
+  ]
+}'
+```
 
-- POST /api/books/price/calculate
+---
 
-Request:
-`{
-"bookList": [
-{ "title": "Clean Code", "quantity": 1 },
-{ "title": "The Clean Coder", "quantity": 1 }
-]
-}`
+# 🛠 **Scripts**
 
-Response: `{
-"totalPrice": 95.0
-}`
+| Command           | Description               |
+| ----------------- | ------------------------- |
+| `npm install`     | Install dependencies      |
+| `npm run dev`     | Run local Vite dev server |
+| `npm run build`   | Production build          |
+| `npm run preview` | Preview production build  |
 
-*********************************************
-API Documentation (Swagger UI)
-=============================================
-Once the app is running:
+---
 
-Swagger UI :
-http://localhost:8081/swagger-ui.html
+# 🎨 **Screenshots (Optional)**
 
-OpenAPI Spec :
-http://localhost:8081/v3/api-docs
+You can add screenshots of:
 
-## Development Approach
-1️. Red – Write failing test
+✔ Book List Page
+✔ Basket Summary
+✔ Price Summary Page
 
-2️. Green – Implement minimum code
+---
 
-3. Refactor – Improve design & remove duplication
+# 🤝 **Contribution Guidelines**
 
-Applied across:
+1. Create a feature branch:
 
-- Book merging logic
+   ```
+   git checkout -b feature/book-ui-enhancement
+   ```
+2. Follow React + ESLint coding standards
+3. Add meaningful commit messages
+4. Submit PR for review
 
-- Discount application
+---
 
-- Controller-level validations
+---
 
-- Enum-to-DTO mapping
+# 🧩 **Troubleshooting**
 
-## How to build the application
-Clone this repository
- 
-- https://github.com/tamalyaahoo/book-discount-price-tdd-v2.git
+### ❌ UI blank on load
 
-You can build the project and run the tests by running `mvn clean install`
+Install missing packages:
 
-## How to run the application
+```bash
+npm install react react-dom @vitejs/plugin-react react-router-dom
+```
 
-By default the application will start on port 8080. If you want the application to run on different port 8081, you can pass additional parameter --server.port=8082 while starting the application (or) you can update the server.port in application.properties
+### ❌ API not working
 
-Once successfully built, you can run the service by one of this commands:
+Check backend is running:
 
-   
-    java -jar target\develop-project-v2-1.0.0-SNAPSHOT.jar
-
-							(or)
-							
-	java -jar target\develop-project-v2-1.0.0-SNAPSHOT.jar --server.port=8081
-Once the application runs you should see below message in console log
-
-
-        :: Spring Boot ::                (v4.0.0)
-        
-        2025-12-05T08:46:19.151+05:30  INFO 22936 --- [book-discount-price] [           main] c.b.k.b.p.BookDiscountPriceApplication   : Starting BookDiscountPriceApplication using Java 25 with PID 22936 (D:\My-WorkSpace\IntelliJ-WorkStation\book-discount-price-tdd-v2\target\classes started by ADMIN in D:\My-WorkSpace\IntelliJ-WorkStation\book-discount-price-tdd-v2)
-        2025-12-05T08:46:19.153+05:30  INFO 22936 --- [book-discount-price] [           main] c.b.k.b.p.BookDiscountPriceApplication   : No active profile set, falling back to 1 default profile: "default"
-        2025-12-05T08:46:20.149+05:30  INFO 22936 --- [book-discount-price] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8081 (http)
-        2025-12-05T08:46:20.162+05:30  INFO 22936 --- [book-discount-price] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-        2025-12-05T08:46:20.163+05:30  INFO 22936 --- [book-discount-price] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.14]
-        2025-12-05T08:46:20.206+05:30  INFO 22936 --- [book-discount-price] [           main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1006 ms
-        2025-12-05T08:46:20.736+05:30  INFO 22936 --- [book-discount-price] [           main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8081 (http) with context path '/'
-        2025-12-05T08:46:20.742+05:30  INFO 22936 --- [book-discount-price] [           main] c.b.k.b.p.BookDiscountPriceApplication   : Started BookDiscountPriceApplication in 1.985 seconds (process running for 2.373)
-        2025-12-05T08:46:20.745+05:30  WARN 22936 --- [book-discount-price] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
-        2025-12-05T08:46:20.745+05:30  WARN 22936 --- [book-discount-price] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
-
- ## How to access the application
-
-Once the application started successfully, you can access the application by launching the below url in the browser:
-    
-    http://localhost:8081/
-
-		(or)
-		
-	http://localhost:<PORT>/
-
-
-
-
+```
+http://localhost:8081/api/books/getbooks
+```
