@@ -156,31 +156,6 @@ curl -X POST http://localhost:8081/api/books/price/calculate \
 
 ---
 
-# 🎨 **Screenshots (Optional)**
-
-You can add screenshots of:
-
-✔ Book List Page
-✔ Basket Summary
-✔ Price Summary Page
-
----
-
-# 🤝 **Contribution Guidelines**
-
-1. Create a feature branch:
-
-   ```
-   git checkout -b feature/book-ui-enhancement
-   ```
-2. Follow React + ESLint coding standards
-3. Add meaningful commit messages
-4. Submit PR for review
-
----
-
----
-
 # 🧩 **Troubleshooting**
 
 ### ❌ UI blank on load
